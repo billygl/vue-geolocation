@@ -8,11 +8,11 @@ const VueGeolocation = {
   getLocation (options = {}, forceReject = false) {
     return new Promise((resolve, reject) => {
       if(forceReject) {
-        reject('reject forced for testing purposes')
+        reject({code: 0, message: 'reject forced for testing purposes'})
         return
       }
       if (!VueGeolocation._isAvailable()) {
-        reject('no browser support')
+        reject({code: 10, message: 'no browser support'})
       } else {
         window.navigator.geolocation.getCurrentPosition(
           position => {
@@ -24,8 +24,8 @@ const VueGeolocation = {
               accuracy: position.coords.accuracy
             })
           },
-          () => {
-            reject('no position access')
+          (error) => {
+            reject(error)
           },
           options
         )
@@ -35,11 +35,11 @@ const VueGeolocation = {
   watchLocation (options = {}, forceReject = false) {
     return new Promise((resolve, reject) => {
       if(forceReject) {
-        reject('reject forced for testing purposes')
+        reject({code: 0, message: 'reject forced for testing purposes'})
         return
       }
       if (!VueGeolocation._isAvailable()) {
-        reject('no browser support')
+        reject({code: 10, message: 'no browser support'})
       } else {
         window.navigator.geolocation.watchPosition(
           position => {
@@ -53,8 +53,8 @@ const VueGeolocation = {
               speed: position.coords.speed
             })
           },
-          () => {
-            reject('no position access')
+          (error) => {
+            reject(error)
           },
           options
         )
@@ -64,10 +64,10 @@ const VueGeolocation = {
   clearLocation (watchID) {
     return new Promise((resolve, reject) => {
       if (!VueGeolocation._isAvailable()) {
-        reject('no browser support')
+        reject({code: 10, message: 'no browser support'})
       }
       else if (!watchID) {
-        reject('please provide watchID')
+        reject({code: 11, message: 'please provide watchID'})
       } else {
         resolve(window.navigator.geolocation.clearWatch(watchID))
       }
