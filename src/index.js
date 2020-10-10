@@ -4,6 +4,14 @@ const VueGeolocation = {
     Vue.prototype.$getLocation = VueGeolocation.getLocation
     Vue.prototype.$watchLocation = VueGeolocation.watchLocation
     Vue.prototype.$clearLocationWatch = VueGeolocation.clearLocation
+    Vue.prototype.$locationErrors = {
+      UNKNOWN_ERROR: 0,
+      PERMISSION_DENIED: 1,
+      POSITION_UNAVAILABLE: 2,
+      TIMED_OUT: 3,
+      NO_BROWSER_SUPPORT: 10,
+      NO_WATCH_ID: 11,
+    }
   },
   getLocation (options = {}, forceReject = false) {
     return new Promise((resolve, reject) => {
@@ -67,7 +75,7 @@ const VueGeolocation = {
         reject({code: 10, message: 'no browser support'})
       }
       else if (!watchID) {
-        reject({code: 11, message: 'please provide watchID'})
+        reject({code: 11, message: 'no watchID'})
       } else {
         resolve(window.navigator.geolocation.clearWatch(watchID))
       }
